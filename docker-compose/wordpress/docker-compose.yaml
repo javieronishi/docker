@@ -14,7 +14,7 @@ services:
     ports:
      - 80:80
     volumes:
-      - /home/javier/Data/wordpress:/var/www/wp-content
+      - /home/javier/data/wordpress:/var/www/wp-content
 
   db:
     container_name: servidor_mysql
@@ -26,4 +26,4 @@ services:
       MYSQL_PASSWORD: asdasdas
       MYSQL_ROOT_PASSWORD: asdasdas
     volumes:
-      - /home/javier/Data/mysql_wp
+      - /home/javier/data/mysql_wp

@@ -1,7 +1,8 @@
 version: "3.9"
 services:
   rabbitmq:
-    image: rabbitmq:3-management-alpine
+    image: rabbitmq:3.9-management-alpine
+    container_name: rabbitmq
     restart: always
     ports:
       - 5672:5672
@@ -9,6 +10,9 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq/
       - rabbitmq_log:/var/log/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: javier
+      RABBITMQ_DEFAULT_PASS: 123456
 
 volumes:
   rabbitmq_data:
