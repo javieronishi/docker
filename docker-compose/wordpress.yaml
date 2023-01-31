@@ -1,0 +1,29 @@
+version: '3.1'
+
+services:
+
+  wordpress:
+    container_name: servidor_wp
+    image: wordpress:latest
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: user_wp
+      WORDPRESS_DB_PASSWORD: asdasdas
+      WORDPRESS_DB_NAME: bd_wp
+    ports:
+     - 80:80
+    volumes:
+      - /home/javier/Data/wordpress:/var/www/wp-content
+
+  db:
+    container_name: servidor_mysql
+    image: mariadb:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: bd_wp
+      MYSQL_USER: user_wp
+      MYSQL_PASSWORD: asdasdas
+      MYSQL_ROOT_PASSWORD: asdasdas
+    volumes:
+      - /home/javier/Data/mysql_wp
