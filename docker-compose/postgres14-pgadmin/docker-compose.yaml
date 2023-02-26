@@ -14,7 +14,7 @@ services:
     volumes:
       - /home/javier/data/postgres14:/var/lib/postgresql/data
     ports:
-      - 5433:5432
+      - 5432:5432
 
   pgadmin:
     image: dpage/pgadmin4
