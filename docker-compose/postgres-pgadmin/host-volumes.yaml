@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - /home/javier/data/postgres:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: javier@postgres.com
+      PGADMIN_DEFAULT_PASSWORD: 123456
+    ports:
+      - 50500:80
+    volumes:
+      - /home/javier/data/pgadmin:/var/lib/pgadmin
+    depends_on:
+      - postgres
