@@ -1,0 +1,30 @@
+version: '3.9'
+
+networks:
+  mymongonet:
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo:/data/db
+    networks:
+      - mymongonet
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 8081:8081
+    networks:
+      - mymongonet
+
+volumes:
+  mongo:
