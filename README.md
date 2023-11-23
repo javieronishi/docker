@@ -1,7 +1,7 @@
 # Docker Platzi
 
 > Docker te permite construir, distribuir y ejecutar cualquier aplicación en cualquier lado
-> 
+>
 
 ![d1.png](img/d1.png)
 
