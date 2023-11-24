@@ -5,7 +5,7 @@ networks:
 
 services:
   redis:
-    image: redis:alpine
+    image: redis
     container_name: redis
     restart: always
     ports:
@@ -16,7 +16,7 @@ services:
       - myredisnet
 
   redis-insight:
-    image: redislabs/redisinsight:latest
+    image: redislabs/redisinsight
     container_name: redis-insight
     restart: always
     ports:

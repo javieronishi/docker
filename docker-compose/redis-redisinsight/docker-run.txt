@@ -1,2 +1,4 @@
-docker run -d --name my-redis -p 127.0.0.1:6379:6379 redis
+docker run -d --name redis -p 6379:6379 redis
+docker run -d --name redisinsight -p 8001:8001 redislabs/redisinsight:latest
+
 
