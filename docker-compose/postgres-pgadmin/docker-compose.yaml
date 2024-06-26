@@ -1,12 +1,12 @@
 version: '3.9'
 
 networks:
-  mydockernet:
+  databasenet:
 
 
 services:
   postgres:
-    image: postgres:14-alpine
+    image: postgres:16-alpine
     container_name: postgres
     restart: always
     env_file:
@@ -16,10 +16,10 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
     networks:
-      - mydockernet
+      - databasenet
 
   pgadmin:
-    image: dpage/pgadmin4:7.1
+    image: dpage/pgadmin4
     container_name: pgadmin
     restart: always
     env_file:
@@ -31,7 +31,7 @@ services:
     depends_on:
       - postgres
     networks:
-      - mydockernet
+      - databasenet
 
 volumes:
   postgres:

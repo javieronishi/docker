@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+
+  vault:
+    image: hashicorp/vault:1.14
+    container_name: vault
+    hostname: vault
+    ports:
+      - 8200:8200
+    volumes:
+      - ./config/vault.hcl:/vault/config/config.hcl
+    environment:
+      - VAULT_ADDR=http://localhost:8200
+    cap_add:
+      - IPC_LOCK
+    command: server
+    restart: unless-stopped
+
+  vault-init:
+    image: hashicorp/vault:1.14
+    container_name: vault-init
+    environment:
+      - VAULT_ADDR=http://vault:8200
+    volumes:
+      - ./config/vault-init.sh:/usr/local/bin/vault-init.sh
+      - ./data/vault/_key-token/:/vault/_key-token/
+      - ./data/vault/file:/vault/file/
+    command: /usr/local/bin/vault-init.sh
+    restart: on-failure
+    depends_on:
+      - vault
