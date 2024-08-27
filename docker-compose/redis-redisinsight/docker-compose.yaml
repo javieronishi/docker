@@ -16,11 +16,11 @@ services:
       - myredisnet
 
   redis-insight:
-    image: redislabs/redisinsight
+    image: redis/redisinsight:latest
     container_name: redis-insight
     restart: always
     ports:
-      - 8001:8001
+      - 5540:5540
     volumes:
       - redisinsight_data:/db
     depends_on:
