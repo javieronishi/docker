@@ -1,0 +1,42 @@
+services:
+  ldap:
+    image: osixia/openldap:1.5.0
+    container_name: openldap-agetic
+    restart: always
+    environment:
+      LDAP_ORGANISATION: "AGETIC"
+      LDAP_DOMAIN: "servicios.agetic.gob.bo"
+      LDAP_BASE_DN: "dc=servicios,dc=agetic,dc=gob,dc=bo"
+      LDAP_ADMIN_PASSWORD: admin
+      LDAP_CONFIG_PASSWORD: admin
+      LDAP_TLS: "true"
+      LDAP_TLS_VERIFY_CLIENT: "never"
+    ports:
+      - "389:389"
+      - "636:636"
+    volumes:
+      - ldap_data_agetic:/var/lib/ldap
+      - ldap_config_agetic:/etc/ldap/slapd.d
+      - ./certs:/container/service/slapd/assets/certs
+    networks:
+      - ldapnet
+
+  phpldapadmin:
+    image: osixia/phpldapadmin:0.9.0
+    container_name: phpldapadmin-agetic
+    restart: always
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: ldap
+    ports:
+      - "6443:443"
+    depends_on:
+      - ldap
+    networks:
+      - ldapnet
+
+networks:
+  ldapnet:
+
+volumes:
+  ldap_data_agetic:
+  ldap_config_agetic:
