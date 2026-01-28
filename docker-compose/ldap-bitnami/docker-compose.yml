@@ -1,0 +1,77 @@
+services:
+  ldap:
+    image: dinkel/openldap:latest
+    container_name: ca-ldap
+    environment:
+      SLAPD_DOMAIN: "desarrollo.adsib.gob.bo"
+      SLAPD_ORGANIZATION: "ADSIB Desarrollo"
+      SLAPD_PASSWORD: "admin"
+      SLAPD_CONFIG_PASSWORD: "admin"
+    ports:
+      - "0.0.0.0:389:389"
+  ldap-init:
+    image: osixia/openldap:1.5.0
+    depends_on:
+      - ldap
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        set -e
+        until ldapsearch -x -H ldap://ldap:389 \
+          -D "cn=admin,dc=desarrollo,dc=adsib,dc=gob,dc=bo" -w admin \
+          -b "dc=desarrollo,dc=adsib,dc=gob,dc=bo" "(objectClass=*)" \
+          >/dev/null 2>&1; do
+          sleep 1
+        done
+        ldapadd -x -H ldap://ldap:389 \
+          -D "cn=admin,dc=desarrollo,dc=adsib,dc=gob,dc=bo" -w admin -c <<'LDIF' || true
+        dn: ou=usuarios,dc=desarrollo,dc=adsib,dc=gob,dc=bo
+        objectClass: top
+        objectClass: organizationalUnit
+        ou: usuarios
+
+        dn: ou=grupos,dc=desarrollo,dc=adsib,dc=gob,dc=bo
+        objectClass: top
+        objectClass: organizationalUnit
+        ou: grupos
+
+        dn: uid=testuser,ou=usuarios,dc=desarrollo,dc=adsib,dc=gob,dc=bo
+        objectClass: inetOrgPerson
+        objectClass: posixAccount
+        objectClass: shadowAccount
+        cn: Test User
+        sn: User
+        uid: testuser
+        uidNumber: 10000
+        gidNumber: 10000
+        homeDirectory: /home/testuser
+        loginShell: /bin/bash
+        mail: testuser@example.local
+        userPassword: testpass
+
+        dn: cn=ca,ou=grupos,dc=desarrollo,dc=adsib,dc=gob,dc=bo
+        objectClass: top
+        objectClass: posixGroup
+        cn: ca
+        gidNumber: 10000
+        memberUid: testuser
+        LDIF
+    restart: "no"
+  ldap-admin:
+    image: ghcr.io/ldapaccountmanager/lam:stable
+    depends_on:
+      - ldap
+    environment:
+      LAM_SKIP_PRECONFIGURE: "false"
+      LAM_PASSWORD: "admin"
+      LAM_LANG: "es_ES"
+      LDAP_SERVER: "ldap://ldap:389"
+      LDAP_DOMAIN: "desarrollo.adsib.gob.bo"
+      LDAP_BASE_DN: "dc=desarrollo,dc=adsib,dc=gob,dc=bo"
+      LDAP_USERS_DN: "ou=usuarios,dc=desarrollo,dc=adsib,dc=gob,dc=bo"
+      LDAP_GROUPS_DN: "ou=grupos,dc=desarrollo,dc=adsib,dc=gob,dc=bo"
+      LDAP_USER: "cn=admin,dc=desarrollo,dc=adsib,dc=gob,dc=bo"
+      LAM_DISABLE_TLS_CHECK: "true"
+    ports:
+      - "7070:80"

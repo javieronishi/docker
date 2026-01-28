@@ -1,0 +1,31 @@
+# Crear OU de usuarios
+dn: ou=usuarios,dc=servicios,dc=agetic,dc=gob,dc=bo
+objectClass: organizationalUnit
+ou: usuarios
+
+# Crear OU de grupos
+dn: ou=grupos,dc=servicios,dc=agetic,dc=gob,dc=bo
+objectClass: organizationalUnit
+ou: grupos
+
+# Crear grupo admins
+dn: cn=admins,ou=grupos,dc=servicios,dc=agetic,dc=gob,dc=bo
+objectClass: posixGroup
+cn: admins
+gidNumber: 500
+memberUid: javier
+
+# Crear usuario javier
+dn: uid=javier,ou=usuarios,dc=servicios,dc=agetic,dc=gob,dc=bo
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: top
+cn: Javier Onishi
+sn: Onishi
+uid: javier
+uidNumber: 1000
+gidNumber: 500
+homeDirectory: /home/users/javier
+loginShell: /bin/bash
+mail: javier@servicios.agetic.gob.bo
+userPassword: {SSHA}X03MO1qnZdYdgyfeuILPmQ==
