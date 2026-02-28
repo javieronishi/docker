@@ -1,0 +1,36 @@
+networks:
+  databasenet9:
+
+services:
+  postgres:
+    image: postgres:9
+    container_name: postgres-9
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+
+    volumes:
+      - postgres-9:/var/lib/postgresql/data
+    networks:
+      - databasenet9
+
+  pgadmin:
+    image: dpage/pgadmin4:4
+    container_name: pgadmin-9
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "5051:80"
+    volumes:
+      - pgadmin-9:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - databasenet9
+
+volumes:
+  postgres-9:
+  pgadmin-9:
