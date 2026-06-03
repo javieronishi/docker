@@ -1,0 +1,40 @@
+services:
+  openldap:
+    image: bitnamilegacy/openldap:2.6.10-debian-12-r4
+    container_name: openldap
+    environment:
+      LDAP_ROOT: "dc=servicios,dc=adsib,dc=gob,dc=bo"
+      LDAP_ADMIN_USERNAME: "admin"
+      LDAP_ADMIN_PASSWORD: "admin123"
+      LDAP_SKIP_DEFAULT_TREE: "yes"
+      LDAP_EXTRA_SCHEMAS: "cosine,inetorgperson,nis"
+      LDAP_CUSTOM_LDIF_DIR: "/ldifs"
+    ports:
+      - "389:1389"
+    volumes:
+      - ldap_data:/bitnami/openldap
+      - ./ldif:/ldifs
+    networks:
+      - ldap_net
+    restart: unless-stopped
+
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    container_name: phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: "openldap"
+      PHPLDAPADMIN_HTTPS: "false"
+    ports:
+      - "8080:80"
+    depends_on:
+      - openldap
+    networks:
+      - ldap_net
+    restart: unless-stopped
+
+volumes:
+  ldap_data:
+
+networks:
+  ldap_net:
+    driver: bridge
