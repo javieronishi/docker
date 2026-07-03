@@ -18,13 +18,13 @@ services:
     container_name: mongo-express
     restart: always
     ports:
-      - "8081:8081"
+      - "8088:8081"
     environment:
       # CONFIGURACIÓN DE CONEXIÓN A MONGO (Crucial)
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: 123456
       ME_CONFIG_MONGODB_SERVER: mongo # Usa el nombre del servicio de arriba como host
-      # CREDENCIALES PARA ENTRAR A LA INTERFAZ WEB (http://localhost:8081)
+      # CREDENCIALES PARA ENTRAR A LA INTERFAZ WEB (http://localhost:8088)
       ME_CONFIG_BASICAUTH_USERNAME: admin
       ME_CONFIG_BASICAUTH_PASSWORD: 123456
     depends_on:
